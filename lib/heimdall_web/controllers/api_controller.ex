@@ -8,7 +8,7 @@ defmodule HeimdallWeb.ApiController do
   # http://0.0.0.0:4000/api/add_check_digit/1234
   def add_check_digit(conn, params) do
     check_digit_with_upc = _calculate_check_digit(params["upc"])
-    _send_json(conn, 200, check_digit_with_upc)
+    _send_json(conn, 200, %{upc: check_digit_with_upc})
   end
 
   # this route takes a comma separated list and should add a check digit to each element
@@ -16,13 +16,11 @@ defmodule HeimdallWeb.ApiController do
   def add_a_bunch_of_check_digits(conn, params) do
     check_digits_with_upc = String.split(params["upcs"], ",")
     |> Enum.map((fn upc -> _calculate_check_digit(upc) end))
-    |> Enum.join(",")
-    _send_json(conn, 200, check_digits_with_upc)
+    _send_json(conn, 200, %{upcs: check_digits_with_upc})
   end
 
   # these are private methods
   defp _calculate_check_digit(upc) do
-    #this is where your code to calculate the check digit should go
     upc_list = _convert_upc(upc)
     evens_sum = Enum.sum(_filter_by_index(upc_list, &Integer.is_even/1))
     odds_sum = Enum.sum(_filter_by_index(upc_list, &Integer.is_odd/1))
@@ -33,7 +31,7 @@ defmodule HeimdallWeb.ApiController do
 
   defp _filter_by_index(nums, filter_func) do
     nums 
-    |> Enum.with_index 
+    |> Enum.with_index
     |> Enum.filter(fn { _, index } -> filter_func.(index + 1) end)
     |> Enum.map(fn { el, _ } -> el end)
   end
