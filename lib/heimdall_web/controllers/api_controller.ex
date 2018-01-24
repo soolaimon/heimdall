@@ -31,8 +31,8 @@ defmodule HeimdallWeb.ApiController do
     Enum.join(upc_list ++ [check])
   end
 
-  defp _filter_by_index(arr, filter_func) do
-    arr 
+  defp _filter_by_index(nums, filter_func) do
+    nums 
     |> Enum.with_index 
     |> Enum.filter(fn { _, index } -> filter_func.(index + 1) end)
     |> Enum.map(fn { el, _ } -> el end)
@@ -41,7 +41,7 @@ defmodule HeimdallWeb.ApiController do
   defp _convert_upc(str) do
     str
     |> String.split("", trim: true)
-    |> Enum.map(fn el -> elem(Integer.parse(el), 0) end)
+    |> Enum.map(&String.to_integer/1)
   end
 
   
