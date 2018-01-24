@@ -14,10 +14,9 @@ defmodule HeimdallWeb.ApiController do
   # this route takes a comma separated list and should add a check digit to each element
   # http://0.0.0.0:4000/api/add_a_bunch_of_check_digits/12345,233454,34341432
   def add_a_bunch_of_check_digits(conn, params) do
-    check_digits_with_upc = String.split(params.upcs, ",")
-    |> tl
+    check_digits_with_upc = String.split(params["upcs"], ",")
     |> Enum.map((fn upc -> _calculate_check_digit(upc) end))
-
+    |> Enum.join(",")
     _send_json(conn, 200, check_digits_with_upc)
   end
 
