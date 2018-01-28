@@ -29,10 +29,8 @@ defmodule HeimdallWeb.ApiController do
     Enum.join(upc_list ++ [_check_by_remainder(remainder)])
   end
 
-  def _check_by_remainder(0) do
-    0
-  end
-  def _check_by_remainder(remainder) do
+  defp _check_by_remainder(0), do: 0
+  defp _check_by_remainder(remainder) do
     10 - remainder
   end
 
