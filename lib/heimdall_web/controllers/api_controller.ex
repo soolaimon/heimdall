@@ -25,13 +25,15 @@ defmodule HeimdallWeb.ApiController do
     evens_sum = Enum.sum(_filter_by_index(upc_list, &Integer.is_even/1))
     odds_sum = Enum.sum(_filter_by_index(upc_list, &Integer.is_odd/1))
     remainder = rem((evens_sum + (odds_sum * 3)), 10)
-    if remainder == 0 do
-      check = 0
-    else
-      check = 10 - remainder
-    end
     
-    Enum.join(upc_list ++ [check])
+    Enum.join(upc_list ++ [_check_by_remainder(remainder)])
+  end
+
+  def _check_by_remainder(0) do
+    0
+  end
+  def _check_by_remainder(remainder) do
+    10 - remainder
   end
 
   defp _filter_by_index(nums, filter_func) do
